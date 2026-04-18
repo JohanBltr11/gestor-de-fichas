@@ -1,0 +1,154 @@
+/* ── Album.css ── */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --album-bg:       #07090f;
+  --album-surface:  #0f1220;
+  --album-border:   rgba(255,255,255,0.07);
+  --album-accent:   #f5c518;
+  --album-accent2:  #e8440a;
+  --album-text:     #dde2ed;
+  --album-muted:    #525a70;
+  --album-radius:   10px;
+  --header-h:       140px;
+}
+
+.album-root {
+  min-height: 100vh;
+  background: var(--album-bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--album-text);
+}
+
+/* ── Header ── */
+.album-header {
+  background: var(--album-surface);
+  border-bottom: 1px solid var(--album-border);
+  position: sticky; top: 0; z-index: 10;
+}
+.album-header-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 18px 24px 16px;
+}
+
+.album-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.album-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; letter-spacing: .06em;
+  color: #f0f4ff; line-height: 1;
+}
+.album-year { color: var(--album-accent); }
+
+/* Botón abrir sobre */
+.btn-quick-entry {
+  background: var(--album-accent2);
+  border: none; border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 16px;
+  transition: background .15s, transform .1s;
+}
+.btn-quick-entry:hover { background: #ff5520; }
+.btn-quick-entry:active { transform: scale(.97); }
+
+/* Progreso */
+.album-stats {
+  display: flex; gap: 20px; align-items: center;
+  margin-bottom: 10px; flex-wrap: wrap;
+}
+.stat { font-size: 13px; color: var(--album-muted); }
+.stat strong { color: var(--album-text); font-weight: 600; margin-right: 3px; }
+.stat--pct strong { color: var(--album-accent); font-size: 16px; }
+
+.progress-track {
+  height: 6px; background: rgba(255,255,255,.07);
+  border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--album-accent2), var(--album-accent));
+  transition: width .6s cubic-bezier(.22,1,.36,1);
+}
+
+/* ── Controles ── */
+.album-controls {
+  max-width: 1200px; margin: 0 auto;
+  padding: 16px 24px 0;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
+
+/* View filters */
+.view-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.view-filter-btn {
+  background: var(--album-surface);
+  border: 1px solid var(--album-border);
+  border-radius: 20px;
+  color: var(--album-muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  padding: 5px 14px;
+  transition: all .15s;
+}
+.view-filter-btn:hover { border-color: var(--album-accent); color: var(--album-text); }
+.view-filter-btn.active {
+  background: var(--album-accent);
+  border-color: var(--album-accent);
+  color: #0a0a0a; font-weight: 600;
+}
+
+/* ── Grid ── */
+.album-grid-wrap {
+  max-width: 1200px; margin: 0 auto;
+  padding: 20px 24px 60px;
+}
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  gap: 10px;
+}
+
+/* Loading / Empty */
+.album-loading, .album-empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 80px 20px;
+  gap: 14px; color: var(--album-muted);
+}
+.album-empty-icon { font-size: 40px; }
+.loading-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(255,255,255,.08);
+  border-top-color: var(--album-accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn-secondary {
+  background: var(--album-surface);
+  border: 1px solid var(--album-border);
+  border-radius: 8px;
+  color: var(--album-text);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 8px 18px;
+  transition: border-color .15s;
+}
+.btn-secondary:hover { border-color: var(--album-accent); }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .album-header-inner { padding: 14px 16px 12px; }
+  .album-title { font-size: 28px; }
+  .album-controls { padding: 12px 16px 0; }
+  .album-grid-wrap { padding: 16px 16px 60px; }
+  .album-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
+}
