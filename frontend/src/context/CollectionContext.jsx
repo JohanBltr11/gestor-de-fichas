@@ -171,18 +171,52 @@ const ALL_STICKERS = [
 // PROVIDER
 // ─────────────────────────────────────────────
 export function CollectionProvider({ children }) {
-  const { token } = useContext(AuthContext);
+  //const { token } = useContext(AuthContext);
   const [stickers, setStickers] = useState(ALL_STICKERS);
   const loading = false;
 
   // Marcar como obtenida
   const toggleSticker = (stickerId) => {
     setStickers((prev) =>
-      prev.map((s) =>
-        s.id === stickerId ? { ...s, owned: !s.owned } : s
-      )
+      prev.map((s) => {
+        if (s.id !== stickerId) return s;
+
+        // Si no la tienes → la obtienes
+        if (!s.owned) {
+          return { ...s, owned: true };
+        }
+
+        // Si ya la tienes → es repetida
+        return {
+          ...s,
+          repeated_count: (s.repeated_count || 0) + 1,
+        };
+      })
     );
   };
+
+  const decrementSticker = (stickerId) => {
+    setStickers((prev) =>
+      prev.map((s) => {
+        if (s.id !== stickerId) return s;
+
+        // Si tiene repetidas → quitar una
+        if (s.repeated_count > 0) {
+          return {
+            ...s,
+            repeated_count: s.repeated_count - 1,
+          };
+        }
+
+        // Si no tiene repetidas → quitar la ficha
+        return {
+          ...s,
+          owned: false,
+        };
+      })
+    );
+  };
+
 
   // Manejar repetidas
   const setRepeated = (stickerId, delta) => {
@@ -201,9 +235,27 @@ export function CollectionProvider({ children }) {
     );
   };
 
+  // 👇 AQUÍ LO AGREGAS
+  const resetSticker = (stickerId) => {
+    setStickers((prev) =>
+      prev.map((s) =>
+        s.id === stickerId
+          ? { ...s, owned: false, repeated_count: 0 }
+          : s
+      )
+    );
+  };
+
   return (
     <CollectionContext.Provider
-      value={{ stickers, loading, toggleSticker, setRepeated }}
+      value={{
+        stickers,
+        loading,
+        toggleSticker,
+        setRepeated,
+        resetSticker,
+        decrementSticker, // 👈 Y AQUÍ
+      }}
     >
       {children}
     </CollectionContext.Provider>

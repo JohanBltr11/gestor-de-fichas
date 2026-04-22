@@ -1,40 +1,73 @@
-/* StickerCard.jsx */
-export default function StickerCard({ sticker, onToggle }) {
-  const { number, name, owned, repeated_count } = sticker;
+import { useContext, useRef, useCallback } from "react";
+import { CollectionContext } from "../context/CollectionContext";
+import "../styles/StickerCard.css";
+
+const HOLD_MS = 600;
+
+export default function StickerCard({ sticker }) {
+  const { toggleSticker, decrementSticker } = useContext(CollectionContext);
+  const { id, code, name, owned, repeated_count, type } = sticker;
+
+  const holdTimer = useRef(null);
+  const didHold   = useRef(false);
+
+  // Clic rápido → marcar / sumar repetida
+  // Mantener 600ms → resetear a "no la tengo"
+  const startHold = useCallback(() => {
+    didHold.current = false;
+    holdTimer.current = setTimeout(() => {
+      didHold.current = true;
+
+      decrementSticker(id); // 👈 aquí el cambio
+
+      if (navigator.vibrate) navigator.vibrate(80);
+    }, HOLD_MS);
+  }, [id, decrementSticker]);
+
+
+  const endHold = useCallback(() => {
+    clearTimeout(holdTimer.current);
+  }, []);
+
+  const handleClick = useCallback(() => {
+    if (didHold.current) return;
+    toggleSticker(id);
+  }, [id, toggleSticker]);
+
+  const handleContextMenu = (e) => e.preventDefault();
+
+  let stateClass = "sc--missing";
+  if (owned && repeated_count === 0) stateClass = "sc--owned";
+  if (owned && repeated_count >  0)  stateClass = "sc--repeated";
+
+  const isGold = type === "especial" || type === "historico";
+
+  let typeTag = null;
+  if (type === "escudo")      typeTag = "ESC";
+  if (type === "foto_equipo") typeTag = "FTO";
+  if (type === "especial")    typeTag = "ESP";
+  if (type === "historico")   typeTag = "HIS";
+  if (type === "estadio")     typeTag = "EST";
+
   return (
     <button
-      onClick={onToggle}
-      title={`${number} — ${name}`}
-      style={{
-        background: owned ? "#1a3a22" : "#0f1220",
-        border: `1px solid ${owned ? "#3ecf8e44" : "rgba(255,255,255,0.07)"}`,
-        borderRadius: 8,
-        cursor: "pointer",
-        padding: "8px 4px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 4,
-        transition: "all .15s",
-        position: "relative",
-      }}
+      className={`sc ${stateClass}${isGold ? " sc--gold" : ""}`}
+      onMouseDown={startHold}
+      onMouseUp={endHold}
+      onMouseLeave={endHold}
+      onTouchStart={startHold}
+      onTouchEnd={endHold}
+      onClick={handleClick}
+      onContextMenu={handleContextMenu}
+      aria-label={`${code} ${name}`}
     >
-      {repeated_count > 0 && (
-        <span style={{
-          position: "absolute", top: 4, right: 4,
-          background: "#e8440a", color: "#fff",
-          fontSize: 9, fontWeight: 700,
-          borderRadius: 20, padding: "1px 5px",
-        }}>
-          +{repeated_count}
-        </span>
+      {owned && repeated_count > 0 && (
+        <span className="sc-badge">+{repeated_count}</span>
       )}
-      <span style={{ fontSize: 11, fontWeight: 700, color: owned ? "#3ecf8e" : "#525a70" }}>
-        #{number}
-      </span>
-      <span style={{ fontSize: 9, color: "#8892a4", textAlign: "center", lineHeight: 1.3 }}>
-        {name}
-      </span>
+      {typeTag && <span className="sc-type">{typeTag}</span>}
+      <span className="sc-code">{code}</span>
+      <span className="sc-name">{name}</span>
+      <span className="sc-dot" />
     </button>
   );
 }

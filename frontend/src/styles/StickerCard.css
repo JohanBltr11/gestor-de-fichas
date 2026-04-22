@@ -1,0 +1,146 @@
+/* ── StickerCard.css — FIFA World Cup 2026 ── */
+
+.sc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 8px 4px 6px;
+  background: #fff8e7;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-top: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  min-height: 76px;
+  text-align: center;
+  transition: border-color .12s, background .12s, transform .08s;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Evita el menú largo-press en móvil */
+  -webkit-touch-callout: none;
+}
+
+.sc:active { transform: scale(.93); }
+
+/* ── Estados ── */
+.sc--missing:hover {
+  border-color: rgba(255,255,255,0.18);
+}
+
+.sc--owned {
+  background: #071a0f;
+  border-top-color: #2db551;
+}
+.sc--owned:hover { border-color: #2db551; }
+
+.sc--repeated {
+  background: #1a0a00;
+  border-top-color: #f07800;
+}
+.sc--repeated:hover { border-color: #f07800; }
+
+/* Especiales y históricos — borde dorado */
+.sc--gold {
+  border-top-color: #f5d800;
+}
+.sc--gold.sc--missing { background: #111000; }
+.sc--gold.sc--owned   { background: #0f0e00; border-top-color: #f5d800; }
+
+/* ── Badge repetidas ── */
+.sc-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #f07800;
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  border-radius: 0;
+  padding: 0 4px;
+  line-height: 14px;
+  letter-spacing: .02em;
+}
+
+/* ── Tag de tipo ── */
+.sc-type {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: rgba(0, 0, 0, 0.2);
+  line-height: 1;
+}
+.sc--gold .sc-type { color: rgba(245,216,0,0.5); }
+
+/* ── Código ── */
+.sc-code {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  line-height: 1;
+  color: #444;
+  transition: color .12s;
+}
+.sc--owned    .sc-code { color: #2db551; }
+.sc--repeated .sc-code { color: #f07800; }
+.sc--gold     .sc-code { color: #8a7800; }
+.sc--gold.sc--owned .sc-code,
+.sc--gold.sc--repeated .sc-code { color: #f5d800; }
+
+/* ── Nombre ── */
+.sc-name {
+  font-size: 8.5px;
+  color: #555;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  width: 100%;
+  padding: 0 2px;
+  transition: color .12s;
+  word-break: break-word;
+}
+.sc--owned    .sc-name { color: #aaa; }
+.sc--repeated .sc-name { color: #aaa; }
+
+/* ── Punto indicador ── */
+.sc-dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #222;
+  margin-top: auto;
+  transition: background .12s;
+  flex-shrink: 0;
+}
+.sc--owned    .sc-dot { background: #2db551; }
+.sc--repeated .sc-dot { background: #f07800; }
+.sc--gold.sc--owned .sc-dot { background: #f5d800; }
+
+/* ── Responsive ── */
+@media (min-width: 600px) {
+  .sc          { min-height: 88px; padding: 10px 6px 8px; }
+  .sc-code     { font-size: 13px; }
+  .sc-name     { font-size: 9.5px; }
+  .sc-dot      { width: 6px; height: 6px; }
+  .sc-badge    { font-size: 10px; padding: 0 5px; line-height: 16px; }
+}
+
+@media (min-width: 1024px) {
+  .sc          { min-height: 96px; padding: 12px 8px 10px; gap: 3px; }
+  .sc-code     { font-size: 14px; }
+  .sc-name     { font-size: 10px; }
+}
+
+@media (max-width: 380px) {
+  .sc          { min-height: 66px; padding: 6px 3px 5px; }
+  .sc-code     { font-size: 11px; }
+  .sc-name     { font-size: 7.5px; }
+}
