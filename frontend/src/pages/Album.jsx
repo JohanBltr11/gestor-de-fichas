@@ -4,17 +4,20 @@ import StickerCard from "../components/StickerCard";
 import "../styles/Album.css";
 
 const SECTIONS = [
-  { id: "all",        label: "Todo",        short: "TODO" },
-  { id: "especiales", label: "Especiales",  short: "ESP"  },
-  { id: "estadios",   label: "Estadios",    short: "EST"  },
-  { id: "grupo-a",    label: "Grupo A",     short: "A"    },
-  { id: "grupo-b",    label: "Grupo B",     short: "B"    },
-  { id: "grupo-c",    label: "Grupo C",     short: "C"    },
-  { id: "grupo-d",    label: "Grupo D",     short: "D"    },
-  { id: "grupo-e",    label: "Grupo E",     short: "E"    },
-  { id: "grupo-f",    label: "Grupo F",     short: "F"    },
-  { id: "grupo-g",    label: "Grupo G",     short: "G"    },
-  { id: "grupo-h",    label: "Grupo H",     short: "H"    },
+  { id: "all",        label: "Todo",      short: "TODO" },
+  { id: "especiales", label: "Especiales",short: "FWC"  },
+  { id: "grupo-a",    label: "Grupo A",   short: "A",   teams: "México · Sudáfrica · Corea del Sur · Rep. Checa" },
+  { id: "grupo-b",    label: "Grupo B",   short: "B",   teams: "Canadá · Bosnia · Catar · Suiza" },
+  { id: "grupo-c",    label: "Grupo C",   short: "C",   teams: "Brasil · Marruecos · Haití · Escocia" },
+  { id: "grupo-d",    label: "Grupo D",   short: "D",   teams: "EE.UU. · Paraguay · Australia · Turquía" },
+  { id: "grupo-e",    label: "Grupo E",   short: "E",   teams: "Alemania · Curazao · Costa de Marfil · Ecuador" },
+  { id: "grupo-f",    label: "Grupo F",   short: "F",   teams: "Países Bajos · Japón · Suecia · Túnez" },
+  { id: "grupo-g",    label: "Grupo G",   short: "G",   teams: "Bélgica · Egipto · Irán · Nueva Zelanda" },
+  { id: "grupo-h",    label: "Grupo H",   short: "H",   teams: "España · Cabo Verde · Arabia Saudita · Uruguay" },
+  { id: "grupo-i",    label: "Grupo I",   short: "I",   teams: "Francia · Senegal · Irak · Noruega" },
+  { id: "grupo-j",    label: "Grupo J",   short: "J",   teams: "Argentina · Argelia · Austria · Jordania" },
+  { id: "grupo-k",    label: "Grupo K",   short: "K",   teams: "Portugal · RD Congo · Uzbekistán · Colombia" },
+  { id: "grupo-l",    label: "Grupo L",   short: "L",   teams: "Inglaterra · Croacia · Ghana · Panamá" },
 ];
 
 const VIEW_FILTERS = [

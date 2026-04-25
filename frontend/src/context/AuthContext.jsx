@@ -1,13 +1,7 @@
 import { createContext, useState, useEffect } from "react";
+import api from "../services/api";
 
 export const AuthContext = createContext(null);
-
-// Usuario de prueba hardcodeado — eliminar cuando conectes el backend
-const FAKE_USER = {
-  email: "test@panini.com",
-  password: "123456",
-  username: "Coleccionista",
-};
 
 export function AuthProvider({ children }) {
   const [user,  setUser]  = useState(null);
@@ -15,25 +9,21 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (token) localStorage.setItem("token", token);
-    else localStorage.removeItem("token");
+    else       localStorage.removeItem("token");
   }, [token]);
 
   const login = async (email, password) => {
-    // Simula validación — reemplazar por llamada real al API
-    if (email === FAKE_USER.email && password === FAKE_USER.password) {
-      const fakeToken = "fake-jwt-token-2026";
-      setToken(fakeToken);
-      setUser({ username: FAKE_USER.username, email });
-    } else {
-      throw { response: { data: { detail: "Correo o contraseña incorrectos." } } };
-    }
+    // POST /auth/login → { access_token, user: { id, email } }
+    const { data } = await api.post("/auth/login", { email, password });
+    setToken(data.access_token);
+    setUser(data.user);
+    return data;
   };
 
-  const register = async (username, email, password) => {
-    // Simula registro exitoso
-    const fakeToken = "fake-jwt-token-2026";
-    setToken(fakeToken);
-    setUser({ username, email });
+  const register = async (email, password) => {
+    // POST /auth/register → registra y luego hace login automático
+    await api.post("/auth/register", { email, password });
+    return login(email, password);
   };
 
   const logout = () => {
