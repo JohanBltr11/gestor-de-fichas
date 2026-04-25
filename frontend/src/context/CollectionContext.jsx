@@ -89,6 +89,66 @@ export function CollectionProvider({ children }) {
     });
   }, []);
 
+
+    const decrementSticker = useCallback(async (stickerId) => {
+    let previousState;
+
+    // actualización optimista
+    setStickers(prev => {
+      return prev.map(s => {
+        if (s.id !== stickerId) return s;
+
+        previousState = s;
+
+        // si tiene repetidas → quitar 1
+        if (s.repeated_count > 0) {
+          return {
+            ...s,
+            repeated_count: s.repeated_count - 1
+          };
+        }
+
+        // si solo tiene 1 → dejar de tenerla
+        if (s.owned) {
+          return {
+            ...s,
+            owned: false,
+            repeated_count: 0
+          };
+        }
+
+        return s;
+      });
+    });
+
+    try {
+      const sticker = stickers.find(s => s.id === stickerId);
+      if (!sticker) return;
+
+      let quantity = 0;
+
+      if (sticker.repeated_count > 0) {
+        quantity = sticker.repeated_count; // ya restamos 1 arriba
+      } else if (sticker.owned) {
+        quantity = 0; // se elimina completamente
+      }
+
+      await api.post("/stickers/toggle", {
+        sticker_id: sticker.code,
+        quantity,
+      });
+
+    } catch {
+      // revertir si falla
+      setStickers(prev =>
+        prev.map(s =>
+          s.id === stickerId ? previousState : s
+        )
+      );
+    }
+  }, [stickers]);
+
+
   // ── Reset: mantener presionado → quitar completamente ─────────────
   const resetSticker = useCallback(async (stickerId) => {
     const sticker = stickers.find(s => s.id === stickerId);
@@ -120,7 +180,7 @@ export function CollectionProvider({ children }) {
   }, [stickers]);
 
   return (
-    <CollectionContext.Provider value={{ stickers, loading, toggleSticker, resetSticker }}>
+    <CollectionContext.Provider value={{ stickers, loading, toggleSticker, resetSticker, decrementSticker }}>
       {children}
     </CollectionContext.Provider>
   );

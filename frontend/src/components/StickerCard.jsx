@@ -5,7 +5,7 @@ import "../styles/StickerCard.css";
 const HOLD_MS = 600;
 
 export default function StickerCard({ sticker }) {
-  const { toggleSticker, decrementSticker } = useContext(CollectionContext);
+  const { toggleSticker, resetSticker, decrementSticker } = useContext(CollectionContext);
   const { id, code, name, owned, repeated_count, type } = sticker;
 
   const holdTimer = useRef(null);
