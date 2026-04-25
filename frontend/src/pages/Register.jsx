@@ -38,10 +38,15 @@ export default function Register() {
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
     try {
-      await register(form.username, form.email, form.password);
+      await register(form.email, form.password); // ← quita form.username
       navigate("/album");
     } catch (err) {
-      setErrors({ general: err?.response?.data?.detail || "Error al registrarse." });
+      const detail = err?.response?.data?.detail;
+      if (Array.isArray(detail)) {
+        setErrors({ general: detail.map(e => e.msg).join(", ") });
+      } else {
+        setErrors({ general: detail || "Error al registrarse." });
+      }
     } finally {
       setLoading(false);
     }

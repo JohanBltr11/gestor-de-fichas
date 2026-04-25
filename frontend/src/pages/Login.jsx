@@ -17,22 +17,28 @@ export default function Login() {
     setError("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.email || !form.password) {
-      setError("Completa todos los campos.");
-      return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!form.email || !form.password) {
+    setError("Completa todos los campos.");
+    return;
+  }
+  setLoading(true);
+  try {
+    await login(form.email, form.password);
+    navigate("/album");
+  } catch (err) {
+    const detail = err?.response?.data?.detail;
+    // detail puede ser string o array de objetos (Pydantic)
+    if (Array.isArray(detail)) {
+      setError(detail.map(e => e.msg).join(", "));
+    } else {
+      setError(detail || "Credenciales incorrectas.");
     }
-    setLoading(true);
-    try {
-      await login(form.email, form.password);
-      navigate("/album");
-    } catch (err) {
-      setError(err?.response?.data?.detail || "Credenciales incorrectas.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="auth-root">
